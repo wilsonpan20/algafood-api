@@ -1,9 +1,6 @@
 package com.will.shop.algafoodapi.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,4 +14,8 @@ public class Cidade {
     private long id;
 
     private String nome;
+
+    @ManyToOne
+    private Estado estado;
+
 }
