@@ -52,11 +52,11 @@ public class RestauranteController {
     @PutMapping("/{restauranteId}")
     @ResponseStatus(value = HttpStatus.CREATED)
     public Restaurante atualizar(@PathVariable Long restauranteId, @RequestBody Restaurante restaurante) {
-            return restauranteService.atualizar(restauranteId, restaurante);
+        return restauranteService.atualizar(restauranteId, restaurante);
     }
 
     @PatchMapping("/{restauranteId}")
-    public Restaurante atualizqarParcial(@PathVariable Long restauranteId, @RequestBody Map<String, Object> campos) {
+    public Restaurante atualizarParcial(@PathVariable Long restauranteId, @RequestBody Map<String, Object> campos) {
         Restaurante restaurante = restauranteService.buscar(restauranteId);
         merge(campos, restaurante);
         return atualizar(restauranteId, restaurante);

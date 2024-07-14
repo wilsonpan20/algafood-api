@@ -1,6 +1,7 @@
 package com.will.shop.algafoodapi.api.exceptionhandler;
 
 import com.will.shop.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
+import com.will.shop.algafoodapi.domain.exception.EntitadeEmUsoException;
 import com.will.shop.algafoodapi.domain.exception.NegocioException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,5 +43,14 @@ public class ApiExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(problema);
 
+    }
+
+    @ExceptionHandler(EntitadeEmUsoException.class)
+    public ResponseEntity<?> tratarEntidadeEmUsoException(EntitadeEmUsoException e) {
+        Problema problema = Problema.builder()
+                .dataHora(LocalDateTime.now())
+                .mensagem(e.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(problema);
     }
 }
