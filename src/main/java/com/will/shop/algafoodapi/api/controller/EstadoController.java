@@ -1,16 +1,10 @@
 package com.will.shop.algafoodapi.api.controller;
 
-import ch.qos.logback.core.joran.util.beans.BeanUtil;
-import com.will.shop.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
-import com.will.shop.algafoodapi.domain.exception.EntitadeEmUsoException;
-import com.will.shop.algafoodapi.domain.model.Cozinha;
+
 import com.will.shop.algafoodapi.domain.model.Estado;
-import com.will.shop.algafoodapi.domain.repository.EstadoRepository;
 import com.will.shop.algafoodapi.domain.service.EstadoService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

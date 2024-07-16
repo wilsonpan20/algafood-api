@@ -1,8 +1,4 @@
 package com.will.shop.algafoodapi.api.controller;
-
-
-import com.will.shop.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
-import com.will.shop.algafoodapi.domain.exception.EntitadeEmUsoException;
 import com.will.shop.algafoodapi.domain.model.Cozinha;
 import com.will.shop.algafoodapi.domain.service.CozinhaService;
 import org.springframework.beans.factory.annotation.Autowired;
