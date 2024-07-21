@@ -4,6 +4,7 @@ import com.will.shop.algafoodapi.domain.exception.EntidadeNaoEncontradaException
 import com.will.shop.algafoodapi.domain.exception.NegocioException;
 import com.will.shop.algafoodapi.domain.model.Cidade;
 import com.will.shop.algafoodapi.domain.service.CidadeService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +32,7 @@ public class CidadeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    Cidade adcionar(@RequestBody Cidade cidade) {
+    Cidade adcionar(@RequestBody  @Valid  Cidade cidade) {
         try {
             cidade = cidadeService.adcionar(cidade);
             return cidade;
@@ -42,7 +43,7 @@ public class CidadeController {
     }
 
     @PutMapping("/{cidadeId}")
-    Cidade atualizar(@PathVariable Long cidadeId, @RequestBody Cidade cidade) {
+    Cidade atualizar(@PathVariable Long cidadeId, @RequestBody @Valid Cidade cidade) {
         try {
             cidade = cidadeService.atualizar(cidadeId, cidade);
             return cidade;

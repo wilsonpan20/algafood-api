@@ -2,6 +2,7 @@ package com.will.shop.algafoodapi.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
@@ -22,13 +23,15 @@ public class Usuario {
     @Column(nullable = false)
     private String nome;
 
+    @NotBlank
     @Column(nullable = false)
     private String Email;
 
+    @NotBlank
     @Column(nullable = false)
     private String senha;
 
-
+    @NotBlank
     @CreationTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
     private LocalDateTime dataCadastro;

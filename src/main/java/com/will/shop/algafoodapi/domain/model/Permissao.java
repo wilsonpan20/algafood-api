@@ -1,6 +1,7 @@
 package com.will.shop.algafoodapi.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -13,8 +14,11 @@ public class Permissao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     @Column(nullable = false)
     private String nome;
+
+    @NotBlank
     @Column(nullable = false)
     private String descricao;
 }

@@ -1,6 +1,7 @@
 package com.will.shop.algafoodapi.api.controller;
 import com.will.shop.algafoodapi.domain.model.Cozinha;
 import com.will.shop.algafoodapi.domain.service.CozinhaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class CozinhaController {
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public Cozinha salvar(@RequestBody Cozinha cozinha) {
+    public Cozinha salvar(@RequestBody @Valid Cozinha cozinha) {
         Cozinha obCozinha = cozinhaService.adcionar(cozinha);
         return obCozinha;
     }

@@ -1,6 +1,7 @@
 package com.will.shop.algafoodapi.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
@@ -31,7 +32,9 @@ public class Pedido {
 
     private StatusPedido status;
 
+    @NotBlank
     @CreationTimestamp
+    @Column(name = "data_criacao", nullable = false)
     private LocalDateTime dataCriacao;
 
 
@@ -39,16 +42,19 @@ public class Pedido {
 
     private LocalDateTime dataCancelamento;
 
+    @NotBlank
     @ManyToOne
     @JoinColumn(nullable = false)
     private FormaPagamento formaPagamento;
 
+    @NotBlank
     @ManyToOne
     @JoinColumn(nullable = false)
     private Restaurante restaurante;
 
+    @NotBlank
     @ManyToOne
-    @JoinColumn(name="usuario_cliente_id",nullable = false)
+    @JoinColumn(name = "usuario_cliente_id", nullable = false)
     private Usuario cliente;
 
     @OneToMany(mappedBy = "pedido")

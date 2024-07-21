@@ -2,18 +2,21 @@ package com.will.shop.algafoodapi.api.controller;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.will.shop.algafoodapi.core.validation.ValidacaoException;
 import com.will.shop.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.will.shop.algafoodapi.domain.exception.NegocioException;
 import com.will.shop.algafoodapi.domain.model.Restaurante;
 import com.will.shop.algafoodapi.domain.service.RestauranteService;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
@@ -24,8 +27,12 @@ import java.util.Map;
 @RestController
 @RequestMapping("v1/restaurantes")
 public class RestauranteController {
+
     @Autowired
     RestauranteService restauranteService;
+
+    @Autowired
+    SmartValidator validator;
 
     @GetMapping
     public List<Restaurante> listar() {
@@ -41,7 +48,7 @@ public class RestauranteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Restaurante salvar(@RequestBody Restaurante restaurante) {
+    public Restaurante salvar(@RequestBody @Valid Restaurante restaurante) {
         try {
             restaurante = restauranteService.adcionar(restaurante);
             return restaurante;
@@ -53,23 +60,35 @@ public class RestauranteController {
 
     @PutMapping("/{restauranteId}")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public Restaurante atualizar(@PathVariable Long restauranteId, @RequestBody Restaurante restaurante) {
+    public Restaurante atualizar(@PathVariable Long restauranteId, @RequestBody @Valid Restaurante restaurante) {
         return restauranteService.atualizar(restauranteId, restaurante);
     }
 
     @PatchMapping("/{restauranteId}")
-    public Restaurante atualizarParcial(@PathVariable Long restauranteId, @RequestBody Map<String, Object> campos, HttpServletRequest request) {
+    public Restaurante atualizarParcial(@PathVariable Long restauranteId, @RequestBody @Valid Map<String, Object> campos, HttpServletRequest request) {
         Restaurante restaurante = restauranteService.buscar(restauranteId);
-        merge(campos, restaurante,request);
+        merge(campos, restaurante, request);
+        validate(restaurante, "restaurante");
         return atualizar(restauranteId, restaurante);
+    }
+
+    private void validate(Restaurante restaurante, String objectName) {
+        BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restaurante, objectName);
+
+        validator.validate(restaurante, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            throw new ValidacaoException(bindingResult);
+        }
+
     }
 
     private static void merge(Map<String, Object> campos, Restaurante restaurante, HttpServletRequest request) {
         ServletServerHttpRequest servletServerHttpRequest = new ServletServerHttpRequest(request);
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES,true);
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,true);
+            objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
 
             Restaurante restauranteMapper = objectMapper.convertValue(campos, Restaurante.class);
 
@@ -80,9 +99,9 @@ public class RestauranteController {
                 ReflectionUtils.setField(field, restaurante, novoValor);
 
             });
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             Throwable rootCause = ExceptionUtils.getRootCause(e);
-            throw new HttpMessageNotReadableException(e.getMessage(),rootCause,servletServerHttpRequest);
+            throw new HttpMessageNotReadableException(e.getMessage(), rootCause, servletServerHttpRequest);
         }
 
     }
@@ -98,4 +117,6 @@ public class RestauranteController {
     public void excluir(@PathVariable Long restauranteId) {
         restauranteService.remover(restauranteId);
     }
+
+
 }

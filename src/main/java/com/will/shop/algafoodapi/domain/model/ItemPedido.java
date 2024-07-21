@@ -1,6 +1,7 @@
 package com.will.shop.algafoodapi.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -23,7 +24,7 @@ public class ItemPedido {
     @ManyToOne
     @JoinColumn(nullable = false)
     private Pedido pedido;
-
+    @NotBlank
     @ManyToOne
     @JoinColumn(nullable = false)
     private Produto produto;
