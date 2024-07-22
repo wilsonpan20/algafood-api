@@ -1,4 +1,4 @@
-set foreign_key_checks = 0;
+    set foreign_key_checks = 0;
 
 delete from cidade;
 delete from cozinha;

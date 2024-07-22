@@ -74,7 +74,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .userMessage(detail)
                 .objects(problemObject)
                 .build();
-    
+
         return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }
 

@@ -2,7 +2,6 @@ package com.will.shop.algafoodapi.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.will.shop.algafoodapi.core.validation.Groups;
-import com.will.shop.algafoodapi.core.validation.Multiplo;
 import com.will.shop.algafoodapi.core.validation.ValorZeroIncluirDescricao;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
