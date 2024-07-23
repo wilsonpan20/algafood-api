@@ -15,32 +15,30 @@ import java.util.List;
 @Data
 public class Produto {
 
-    @EqualsAndHashCode.Include
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@EqualsAndHashCode.Include
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @NotBlank
-    @Column(nullable = false)
-    private String nome;
+	@NotBlank
+	@Column(nullable = false)
+	private String nome;
 
+	@NotBlank
+	@Column(nullable = false)
+	private String descricao;
 
-    @NotBlank
-    @Column(nullable = false)
-    private String descricao;
+	@NotBlank
+	@Column(nullable = false)
+	private BigDecimal preco;
 
+	@NotBlank
+	@Column(nullable = false)
+	private Boolean ativo;
 
-    @NotBlank
-    @Column(nullable = false)
-    private BigDecimal preco;
-
-    @NotBlank
-    @Column(nullable = false)
-    private Boolean ativo;
-
-    @NotBlank
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private Restaurante restaurante;
+	@NotBlank
+	@ManyToOne
+	@JoinColumn(nullable = false)
+	private Restaurante restaurante;
 
 }

@@ -6,6 +6,7 @@ import com.will.shop.algafoodapi.domain.exception.EntitadeEmUsoException;
 import com.will.shop.algafoodapi.domain.model.Cozinha;
 import com.will.shop.algafoodapi.domain.repository.CozinhaRepository;
 import com.will.shop.algafoodapi.domain.service.CozinhaService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -18,54 +19,55 @@ import java.util.Optional;
 @Service
 public class CozinhaServiceImpl implements CozinhaService {
 
-    private CozinhaRepository cozinhaRepository;
+	private CozinhaRepository cozinhaRepository;
 
-    @Autowired
-    public CozinhaServiceImpl(CozinhaRepository cozinhaRepository) {
-        this.cozinhaRepository = cozinhaRepository;
-    }
+	@Autowired
+	public CozinhaServiceImpl(CozinhaRepository cozinhaRepository) {
+		this.cozinhaRepository = cozinhaRepository;
+	}
 
-    @Override
-    public List<Cozinha> listar() {
-        List<Cozinha> cozinhas = cozinhaRepository.findAll();
+	@Override
+	public List<Cozinha> listar() {
+		List<Cozinha> cozinhas = cozinhaRepository.findAll();
 
-        return cozinhas;
-    }
+		return cozinhas;
+	}
 
-    @Override
-    public Cozinha buscar(long cozinhaId) {
-        return cozinhaRepository.findById(cozinhaId)
-                .orElseThrow(() -> new CozinhaNaoEncontradaException(Cozinha.class,cozinhaId));
-    }
+	@Override
+	public Cozinha buscar(long cozinhaId) {
+		return cozinhaRepository.findById(cozinhaId)
+				.orElseThrow(() -> new CozinhaNaoEncontradaException(Cozinha.class, cozinhaId));
+	}
 
-    @Override
-    public Cozinha adcionar(Cozinha cozinha) {
-        return cozinhaRepository.save(cozinha);
-    }
+	@Transactional
+	@Override
+	public Cozinha adcionar(Cozinha cozinha) {
+		return cozinhaRepository.save(cozinha);
+	}
 
+	public Cozinha atualizar(long cozinhaId, Cozinha cozinha) {
 
-    public Cozinha atualizar(long cozinhaId, Cozinha cozinha) {
+		Cozinha cozinha1 = cozinhaRepository.findById(cozinhaId)
+				.orElseThrow(() -> new CozinhaNaoEncontradaException(Cozinha.class, cozinhaId));
 
-        Cozinha cozinha1 = cozinhaRepository.findById(cozinhaId)
-                .orElseThrow(() -> new CozinhaNaoEncontradaException(Cozinha.class,cozinhaId));
+		BeanUtils.copyProperties(cozinha, cozinha1, "id");
 
-        BeanUtils.copyProperties(cozinha, cozinha1, "id");
+		cozinhaRepository.save(cozinha1);
 
-        cozinhaRepository.save(cozinha1);
+		return cozinha1;
+	}
 
-        return cozinha1;
-    }
+	@Transactional
+	@Override
+	public void remover(Long cozinhaId) {
+		try {
+			cozinhaRepository.deleteById(cozinhaId);
 
-    @Override
-    public void remover(Long cozinhaId) {
-        try {
-            cozinhaRepository.deleteById(cozinhaId);
+		} catch (EmptyResultDataAccessException e) {
+			throw new CozinhaNaoEncontradaException(Cozinha.class, cozinhaId);
 
-        } catch (EmptyResultDataAccessException e) {
-            throw new CozinhaNaoEncontradaException(Cozinha.class,cozinhaId);
-
-        } catch (DataIntegrityViolationException e) {
-            throw new EntitadeEmUsoException (Cozinha.class, cozinhaId);
-        }
-    }
+		} catch (DataIntegrityViolationException e) {
+			throw new EntitadeEmUsoException(Cozinha.class, cozinhaId);
+		}
+	}
 }

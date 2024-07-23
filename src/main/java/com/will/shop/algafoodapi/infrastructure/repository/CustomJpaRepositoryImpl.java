@@ -7,29 +7,23 @@ import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 
 import java.util.Optional;
 
+public class CustomJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> implements CustomJpaRepository<T, ID> {
 
+	private EntityManager manager;
 
-public class CustomJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID>
-        implements CustomJpaRepository<T, ID> {
+	public CustomJpaRepositoryImpl(JpaEntityInformation<T, ?> entityInformation, EntityManager entityManager) {
+		super(entityInformation, entityManager);
 
-    private EntityManager manager;
+		this.manager = entityManager;
+	}
 
-    public CustomJpaRepositoryImpl(JpaEntityInformation<T, ?> entityInformation,
-                                   EntityManager entityManager) {
-        super(entityInformation, entityManager);
+	@Override
+	public Optional<T> buscarPrimeiro() {
+		var jpql = "from " + getDomainClass().getName();
 
-        this.manager = entityManager;
-    }
+		T entity = manager.createQuery(jpql, getDomainClass()).setMaxResults(1).getSingleResult();
 
-    @Override
-    public Optional<T> buscarPrimeiro() {
-        var jpql = "from " + getDomainClass().getName();
-
-        T entity = manager.createQuery(jpql, getDomainClass())
-                .setMaxResults(1)
-                .getSingleResult();
-
-        return Optional.ofNullable(entity);
-    }
+		return Optional.ofNullable(entity);
+	}
 
 }

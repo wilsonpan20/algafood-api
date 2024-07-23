@@ -20,56 +20,50 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import static com.will.shop.algafoodapi.infrastructure.repository.spec.RestaurantesSpecs.comFreteGratis;
 import static com.will.shop.algafoodapi.infrastructure.repository.spec.RestaurantesSpecs.comNomeSemelhante;
 
 @Repository
 public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
-    @PersistenceContext
-    private EntityManager manager;
+	@PersistenceContext
+	private EntityManager manager;
 
-    @Autowired @Lazy
-    RestauranteRepository restauranteRepository;
+	@Autowired
+	@Lazy
+	RestauranteRepository restauranteRepository;
 
-    @Override
-    public List<Restaurante> find(String nome,
-                                  BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {
+	@Override
+	public List<Restaurante> find(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {
 
+		var predicates = new ArrayList<>();
 
-        var predicates = new ArrayList<>();
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
 
-        CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<Restaurante> criteria = builder.createQuery(Restaurante.class);
+		Root<Restaurante> root = criteria.from(Restaurante.class);
 
-        CriteriaQuery<Restaurante> criteria = builder.createQuery(Restaurante.class);
-        Root<Restaurante> root = criteria.from(Restaurante.class);
+		TypedQuery<Restaurante> query = manager.createQuery(criteria);
 
+		if (StringUtils.hasText(nome)) {
+			predicates.add(builder.like(root.get("nome"), "%" + nome + "%"));
 
-        TypedQuery<Restaurante> query = manager.createQuery(criteria);
+		}
+		if (taxaFreteInicial != null) {
+			predicates.add(builder.greaterThanOrEqualTo(root.get("taxaFrete"), taxaFreteInicial));
+		}
 
+		if (taxaFreteFinal != null) {
+			predicates.add(builder.lessThanOrEqualTo(root.get("taxaFrete"), taxaFreteFinal));
+		}
 
-        if (StringUtils.hasText(nome)) {
-            predicates.add(builder.like(root.get("nome"), "%" + nome + "%"));
+		criteria.where(predicates.toArray(new Predicate[0]));
 
-        }
-        if (taxaFreteInicial != null) {
-            predicates.add(builder
-                    .greaterThanOrEqualTo(root.get("taxaFrete"), taxaFreteInicial));
-        }
+		return query.getResultList();
+	}
 
-        if (taxaFreteFinal != null) {
-            predicates.add(builder
-                    .lessThanOrEqualTo(root.get("taxaFrete"), taxaFreteFinal));
-        }
-
-        criteria.where(predicates.toArray(new Predicate[0]));
-
-
-        return query.getResultList();
-    }
-
-    @Override
-    public List<Restaurante> findComFreteGratis(String nome) {
-        return restauranteRepository.findAll(comFreteGratis()
-                .and(comNomeSemelhante(nome)));
-    }
+	@Override
+	public List<Restaurante> findComFreteGratis(String nome) {
+		return restauranteRepository.findAll(comFreteGratis().and(comNomeSemelhante(nome)));
+	}
 }

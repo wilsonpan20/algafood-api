@@ -15,17 +15,17 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 public class Cozinha {
-    @NotNull(groups = Groups.CozinhaId.class)
-    @EqualsAndHashCode.Include
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@NotNull(groups = Groups.CozinhaId.class)
+	@EqualsAndHashCode.Include
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @NotBlank
-    @Column
-    private  String nome;
+	@NotBlank
+	@Column
+	private String nome;
 
-    @JsonIgnore
-    @OneToMany(mappedBy="cozinha")
-    private List<Restaurante> restaurantes = new ArrayList<>();
+	@JsonIgnore
+	@OneToMany(mappedBy = "cozinha")
+	private List<Restaurante> restaurantes = new ArrayList<>();
 }

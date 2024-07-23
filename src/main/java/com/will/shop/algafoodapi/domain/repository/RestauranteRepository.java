@@ -13,18 +13,19 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface RestauranteRepository extends CustomJpaRepository<Restaurante, Long>, RestauranteRepositoryQueries, JpaSpecificationExecutor<Restaurante> {
-    List<Restaurante> findByTaxaFreteBetween(BigDecimal inicialTaxa, BigDecimal finalTaxa);
+public interface RestauranteRepository extends CustomJpaRepository<Restaurante, Long>, RestauranteRepositoryQueries,
+		JpaSpecificationExecutor<Restaurante> {
+	List<Restaurante> findByTaxaFreteBetween(BigDecimal inicialTaxa, BigDecimal finalTaxa);
 
-    //List<Restaurante> findByNomeContainingAndCozinhaId(String nome, Long cozinhaId);
-    @Query("from Restaurante r join r.cozinha left join r.formasPagamento left join r.endereco")
-    List<Restaurante> findAll();
+	//List<Restaurante> findByNomeContainingAndCozinhaId(String nome, Long cozinhaId);
+	@Query("from Restaurante r join r.cozinha left join r.formasPagamento left join r.endereco")
+	List<Restaurante> findAll();
 
-    //@Query("from Restaurante where nome like %:nome% and cozinha.id = :id")
-    List<Restaurante> consultarPorNome(String nome, @Param("id") Long cozinhaId);
+	//@Query("from Restaurante where nome like %:nome% and cozinha.id = :id")
+	List<Restaurante> consultarPorNome(String nome, @Param("id") Long cozinhaId);
 
-    Optional<Restaurante> findFistByNomeContaining(String nome);
+	Optional<Restaurante> findFistByNomeContaining(String nome);
 
-    int countByCozinhaId(Long cozinha);
+	int countByCozinhaId(Long cozinha);
 
 }

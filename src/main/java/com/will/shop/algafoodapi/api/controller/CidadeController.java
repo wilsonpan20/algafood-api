@@ -14,48 +14,49 @@ import java.util.List;
 @RestController
 @RequestMapping("v1/cidades")
 public class CidadeController {
-    @Autowired
-    CidadeService cidadeService;
 
-    @GetMapping
-    List<Cidade> listar() {
-        List<Cidade> cidades = cidadeService.listar();
-        return cidades;
-    }
+	@Autowired
+	CidadeService cidadeService;
 
-    @GetMapping("/{cidadeId}")
-    Cidade buscar(@PathVariable Long cidadeId) {
-        Cidade cidade = cidadeService.buscar(cidadeId);
-        return cidade;
+	@GetMapping
+	List<Cidade> listar() {
+		List<Cidade> cidades = cidadeService.listar();
+		return cidades;
+	}
 
-    }
+	@GetMapping("/{cidadeId}")
+	Cidade buscar(@PathVariable Long cidadeId) {
+		Cidade cidade = cidadeService.buscar(cidadeId);
+		return cidade;
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    Cidade adcionar(@RequestBody  @Valid  Cidade cidade) {
-        try {
-            cidade = cidadeService.adcionar(cidade);
-            return cidade;
+	}
 
-        } catch (EntidadeNaoEncontradaException e) {
-            throw new NegocioException(e.getMessage(), e);
-        }
-    }
+	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+	Cidade adcionar(@RequestBody @Valid Cidade cidade) {
+		try {
+			cidade = cidadeService.adcionar(cidade);
+			return cidade;
 
-    @PutMapping("/{cidadeId}")
-    Cidade atualizar(@PathVariable Long cidadeId, @RequestBody @Valid Cidade cidade) {
-        try {
-            cidade = cidadeService.atualizar(cidadeId, cidade);
-            return cidade;
-        } catch (EntidadeNaoEncontradaException e) {
-            throw new NegocioException(e.getMessage(), e);
-        }
+		} catch (EntidadeNaoEncontradaException e) {
+			throw new NegocioException(e.getMessage(), e);
+		}
+	}
 
-    }
+	@PutMapping("/{cidadeId}")
+	Cidade atualizar(@PathVariable Long cidadeId, @RequestBody @Valid Cidade cidade) {
+		try {
+			cidade = cidadeService.atualizar(cidadeId, cidade);
+			return cidade;
+		} catch (EntidadeNaoEncontradaException e) {
+			throw new NegocioException(e.getMessage(), e);
+		}
 
-    @DeleteMapping("/{cidadeId}")
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void excluir(@PathVariable Long cidadeId) {
-        cidadeService.remover(cidadeId);
-    }
+	}
+
+	@DeleteMapping("/{cidadeId}")
+	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+	public void excluir(@PathVariable Long cidadeId) {
+		cidadeService.remover(cidadeId);
+	}
 }

@@ -1,7 +1,5 @@
 package com.will.shop.algafoodapi;
 
-
-
 import com.will.shop.algafoodapi.infrastructure.repository.CustomJpaRepositoryImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
