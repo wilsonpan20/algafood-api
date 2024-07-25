@@ -1,5 +1,6 @@
 package com.will.shop.algafoodapi.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.will.shop.algafoodapi.core.validation.Groups;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
@@ -23,6 +24,7 @@ public class Cidade {
 	@Column(nullable = false)
 	private String nome;
 
+	@JsonIgnoreProperties(value = {"name"},allowGetters = true)
 	@Valid
 	@ConvertGroup(from = Default.class, to = Groups.EstadoId.class)
 	@NotNull

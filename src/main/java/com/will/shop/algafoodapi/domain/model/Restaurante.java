@@ -1,7 +1,5 @@
 package com.will.shop.algafoodapi.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.will.shop.algafoodapi.core.validation.Groups;
 import com.will.shop.algafoodapi.core.validation.ValorZeroIncluirDescricao;
 import jakarta.persistence.*;
@@ -18,6 +16,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,35 +40,35 @@ public class Restaurante {
 	@Column(name = "taxa_frete", nullable = false)
 	private BigDecimal taxaFrete;
 
+
 	@Valid
-	@JsonIgnoreProperties(value = {"name"},allowGetters = true)
 	@ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
 	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "cozinha_id", nullable = false)
 	private Cozinha cozinha;
 
-	@JsonIgnore
+
 	@Embedded
 	private Endereco endereco;
 
-	@JsonIgnore
+
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime(6)")
-	private LocalDateTime dataCadastro;
+	private OffsetDateTime dataCadastro;
 
-	@JsonIgnore
+
 	@UpdateTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
-	private LocalDateTime dataAtualizacao;
+	private OffsetDateTime dataAtualizacao;
 
-	@JsonIgnore
+
 	@ManyToMany
 	@JoinTable(name = "restaurante_forma_pagamento", joinColumns = @JoinColumn(name = "restaurante_id"),
             inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
 	private List<FormaPagamento> formasPagamento = new ArrayList<>();
 
-	@JsonIgnore
+
 	@OneToMany(mappedBy = "restaurante")
 	private List<Produto> produtos = new ArrayList<>();
 
