@@ -11,6 +11,5 @@ public class TimeZoneConfig {
 	@PostConstruct
 	public void init() {
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-		System.out.println("Default timezone set to: " + TimeZone.getDefault().getID());
 	}
 }
