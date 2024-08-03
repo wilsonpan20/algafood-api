@@ -1,4 +1,4 @@
-package com.will.shop.algafoodapi.api.model;
+package com.will.shop.algafoodapi.api.model.dto.response;
 
 import lombok.Getter;
 import lombok.Setter;

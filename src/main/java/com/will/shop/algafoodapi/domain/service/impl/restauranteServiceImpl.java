@@ -1,6 +1,5 @@
 package com.will.shop.algafoodapi.domain.service.impl;
 
-import com.will.shop.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.will.shop.algafoodapi.domain.exception.EntitadeEmUsoException;
 import com.will.shop.algafoodapi.domain.exception.RestauranteNaoEncontradaException;
 import com.will.shop.algafoodapi.domain.model.Cozinha;
@@ -9,6 +8,7 @@ import com.will.shop.algafoodapi.domain.repository.CozinhaRepository;
 import com.will.shop.algafoodapi.domain.repository.RestauranteRepository;
 import com.will.shop.algafoodapi.domain.service.RestauranteService;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -16,8 +16,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
 
 @Service
 public class restauranteServiceImpl implements RestauranteService {
@@ -56,7 +54,7 @@ public class restauranteServiceImpl implements RestauranteService {
 
 	@Transactional
 	@Override
-	public Restaurante atualizar(long restauranteId, Restaurante restaurante) {
+	public Restaurante atualizar(long restauranteId, @Valid Restaurante restaurante) {
 		Long cozinhaId = restaurante.getCozinha().getId();
 		Cozinha cozinha = cozinhaRepository.findById(cozinhaId).orElseThrow(() -> {
 			throw new RestauranteNaoEncontradaException(Cozinha.class, cozinhaId);

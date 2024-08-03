@@ -1,7 +1,7 @@
 package com.will.shop.algafoodapi.domain.service;
 
-import com.will.shop.algafoodapi.domain.model.Cozinha;
 import com.will.shop.algafoodapi.domain.model.Restaurante;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public interface RestauranteService {
 
 	Restaurante adcionar(Restaurante restaurante);
 
-	Restaurante atualizar(long restauranteId, Restaurante restaurante);
+	Restaurante atualizar(long restauranteId, @Valid Restaurante restaurante);
 
 	void remover(Long RestauranteId);
 }

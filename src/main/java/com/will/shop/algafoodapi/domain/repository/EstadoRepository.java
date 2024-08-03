@@ -9,5 +9,4 @@ import java.util.List;
 
 @Repository
 public interface EstadoRepository extends JpaRepository<Estado, Long> {
-
 }
