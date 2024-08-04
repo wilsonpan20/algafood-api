@@ -41,11 +41,10 @@ public class EstadoServiceImpl implements EstadoService {
 
 	@Override
 	public Estado buscar(Long estadoId) {
-		Estado estado = estadoRepository.findById(estadoId).orElseThrow(() -> {
+		return estadoRepository.findById(estadoId).orElseThrow(() -> {
 			throw new EstadoNaoEncontradaException(Estado.class, estadoId);
 
 		});
-		return estado;
 	}
 
 	@Transactional

@@ -14,7 +14,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CozinhaServiceImpl implements CozinhaService {
@@ -49,8 +48,6 @@ public class CozinhaServiceImpl implements CozinhaService {
 
 		Cozinha cozinha1 = cozinhaRepository.findById(cozinhaId)
 				.orElseThrow(() -> new CozinhaNaoEncontradaException(Cozinha.class, cozinhaId));
-
-		BeanUtils.copyProperties(cozinha, cozinha1, "id");
 
 		cozinhaRepository.save(cozinha1);
 

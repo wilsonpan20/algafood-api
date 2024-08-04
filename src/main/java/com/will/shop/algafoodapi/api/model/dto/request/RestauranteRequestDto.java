@@ -13,14 +13,14 @@ import java.math.BigDecimal;
 @Setter
 public class RestauranteRequestDto {
 
-	//@NotBlank
-	private  String nome;
+	@NotBlank
+	private String nome;
 
-	//@NotNull
-	//@PositiveOrZero
+	@NotNull
+	@PositiveOrZero
 	private BigDecimal taxaFrete;
 
-	//@Valid
-	//@NotNull
+	@Valid
+	@NotNull
 	private CozinhaRequestDto cozinha;
 }

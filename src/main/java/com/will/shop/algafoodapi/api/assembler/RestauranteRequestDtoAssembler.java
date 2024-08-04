@@ -1,5 +1,6 @@
 package com.will.shop.algafoodapi.api.assembler;
 
+import com.will.shop.algafoodapi.api.model.dto.request.CozinhaRequestDto;
 import com.will.shop.algafoodapi.api.model.dto.request.RestauranteRequestDto;
 import com.will.shop.algafoodapi.domain.model.Cozinha;
 import com.will.shop.algafoodapi.domain.model.Restaurante;
@@ -15,5 +16,18 @@ public class RestauranteRequestDtoAssembler {
 
 	public Restaurante requestDto(RestauranteRequestDto restauranteRequestDto) {
 		return modelMapper.map(restauranteRequestDto, Restaurante.class);
+	}
+
+	public void copyToDomainObject(RestauranteRequestDto restauranteRequestDto, Restaurante restaurante) {
+
+		/** Para evitar essa exception identifier of an instance
+		 of com.will.shop.algafoodapi.domain.model.Cozinha was altered from 2 to 1**/
+		restaurante.setCozinha(new Cozinha());
+
+		modelMapper.map(restauranteRequestDto, restaurante);
+	}
+
+	public RestauranteRequestDto toDto(Restaurante restaurante) {
+		return modelMapper.map(restaurante, RestauranteRequestDto.class);
 	}
 }

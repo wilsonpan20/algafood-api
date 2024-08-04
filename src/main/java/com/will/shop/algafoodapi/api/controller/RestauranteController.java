@@ -8,6 +8,7 @@ import com.will.shop.algafoodapi.api.model.dto.request.CozinhaRequestDto;
 import com.will.shop.algafoodapi.api.model.dto.request.RestauranteRequestDto;
 import com.will.shop.algafoodapi.api.model.dto.response.RestauranteResponseDto;
 import com.will.shop.algafoodapi.core.validation.ValidacaoException;
+import com.will.shop.algafoodapi.domain.exception.CozinhaNaoEncontradaException;
 import com.will.shop.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.will.shop.algafoodapi.domain.exception.NegocioException;
 import com.will.shop.algafoodapi.domain.model.Cozinha;
@@ -75,24 +76,44 @@ public class RestauranteController {
 
 	@PutMapping("/{restauranteId}")
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public RestauranteResponseDto atualizar(@PathVariable Long restauranteId,
-			@RequestBody @Valid RestauranteRequestDto restaurante) {
-		return restauranteResponseDtoAssembler.responseDto(
-				restauranteService.atualizar(restauranteId, restauranteRequestDtoAssembler.requestDto(restaurante)));
+	public RestauranteResponseDto atualizar (@PathVariable Long restauranteId,
+		@RequestBody @Valid	 RestauranteRequestDto restauranteRequestDto) {
+		try {
+			Restaurante restauranteExistente = restauranteService.buscar(restauranteId);
+			restauranteRequestDtoAssembler.copyToDomainObject(restauranteRequestDto, restauranteExistente);
+
+			return restauranteResponseDtoAssembler.responseDto(restauranteService.adcionar(restauranteExistente));
+
+		} catch (CozinhaNaoEncontradaException e) {
+			throw new NegocioException(e.getMessage());
+		}
 	}
 
 	@PatchMapping("/{restauranteId}")
 	public RestauranteResponseDto atualizarParcial(@PathVariable Long restauranteId,
 			@RequestBody @Valid Map<String, Object> campos, HttpServletRequest request) {
+
 		Restaurante restaurante = restauranteService.buscar(restauranteId);
 		merge(campos, restaurante, request);
 		validate(restaurante, "restaurante");
 
-		RestauranteRequestDto restauranteRequestDto = toDto(restaurante);
+		RestauranteRequestDto restauranteRequestDto = restauranteRequestDtoAssembler.toDto(restaurante);
 
-		return restauranteResponseDtoAssembler.responseDto(restauranteService.atualizar(restauranteId,
-				restauranteRequestDtoAssembler.requestDto(restauranteRequestDto)));
+		return restauranteResponseDtoAssembler.responseDto(
+				restauranteService.adcionar(restauranteRequestDtoAssembler.requestDto(restauranteRequestDto)));
 
+	}
+
+	private static Object convertValue(Object valorPropriedade, Class<?> targetType) {
+		if (targetType.equals(BigDecimal.class) && valorPropriedade instanceof Number) {
+			return BigDecimal.valueOf(((Number) valorPropriedade).doubleValue());
+		}
+		return valorPropriedade;
+	}
+
+	@DeleteMapping("/{restauranteId}")
+	public void excluir(@PathVariable Long restauranteId) {
+		restauranteService.remover(restauranteId);
 	}
 
 	private static void merge(Map<String, Object> camposOrigem, Restaurante restauranteDestino,
@@ -121,18 +142,6 @@ public class RestauranteController {
 
 	}
 
-	private static Object convertValue(Object valorPropriedade, Class<?> targetType) {
-		if (targetType.equals(BigDecimal.class) && valorPropriedade instanceof Number) {
-			return BigDecimal.valueOf(((Number) valorPropriedade).doubleValue());
-		}
-		return valorPropriedade;
-	}
-
-	@DeleteMapping("/{restauranteId}")
-	public void excluir(@PathVariable Long restauranteId) {
-		restauranteService.remover(restauranteId);
-	}
-
 	private void validate(Restaurante restaurante, String objectName) {
 		BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restaurante, objectName);
 
@@ -144,14 +153,4 @@ public class RestauranteController {
 
 	}
 
-	private RestauranteRequestDto toDto(Restaurante restaurante) {
-		RestauranteRequestDto restauranteRequestDto = new RestauranteRequestDto();
-		CozinhaRequestDto cozinhaRequestDto = new CozinhaRequestDto();
-		cozinhaRequestDto.setId(restaurante.getCozinha().getId());
-		restauranteRequestDto.setNome(restaurante.getNome());
-		restauranteRequestDto.setTaxaFrete(restaurante.getTaxaFrete());
-		restauranteRequestDto.setCozinha(cozinhaRequestDto);
-
-		return restauranteRequestDto;
-	}
 }
