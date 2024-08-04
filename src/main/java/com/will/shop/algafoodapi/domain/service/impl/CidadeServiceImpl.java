@@ -55,7 +55,7 @@ public class CidadeServiceImpl implements CidadeService {
 		return cidadeRepository.save(cidade);
 	}
 
-    @Transactional
+	@Transactional
 	@Override
 	public Cidade atualizar(Long cidadeId, Cidade cidade) {
 		Long estadoId = cidade.getEstado().getId();
@@ -71,15 +71,16 @@ public class CidadeServiceImpl implements CidadeService {
 		return cidadeRepository.save(cidade1);
 	}
 
-    @Transactional
+	@Transactional
 	@Override
 	public void remover(Long cidadeId) {
+
+		Cidade cidade = cidadeRepository.findById(cidadeId)
+				.orElseThrow(() -> new CidadeNaoEncontradaException(Cidade.class, cidadeId));
 		try {
 			cidadeRepository.deleteById(cidadeId);
 			cidadeRepository.flush();
 
-		} catch (EmptyResultDataAccessException e) {
-			throw new CidadeNaoEncontradaException(Cidade.class, cidadeId);
 		} catch (DataIntegrityViolationException e) {
 			throw new EntitadeEmUsoException(Cidade.class, cidadeId);
 		}

@@ -1,8 +1,10 @@
 package com.will.shop.algafoodapi.domain.service.impl;
 
+import com.will.shop.algafoodapi.domain.exception.CozinhaNaoEncontradaException;
 import com.will.shop.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.will.shop.algafoodapi.domain.exception.EntitadeEmUsoException;
 import com.will.shop.algafoodapi.domain.exception.EstadoNaoEncontradaException;
+import com.will.shop.algafoodapi.domain.model.Cozinha;
 import com.will.shop.algafoodapi.domain.model.Estado;
 import com.will.shop.algafoodapi.domain.repository.EstadoRepository;
 import com.will.shop.algafoodapi.domain.service.EstadoService;
@@ -56,11 +58,12 @@ public class EstadoServiceImpl implements EstadoService {
 	@Transactional
 	@Override
 	public void remover(Long estadoId) {
+		Estado estado = estadoRepository.findById(estadoId)
+				.orElseThrow(() -> new EstadoNaoEncontradaException(Estado.class, estadoId));
 		try {
 			estadoRepository.deleteById(estadoId);
 			estadoRepository.flush();
-		} catch (EmptyResultDataAccessException e) {
-			throw new EstadoNaoEncontradaException(Estado.class, estadoId);
+
 		} catch (DataIntegrityViolationException e) {
 			throw new EntitadeEmUsoException(Estado.class, estadoId);
 		}

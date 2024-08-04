@@ -56,12 +56,13 @@ public class CozinhaServiceImpl implements CozinhaService {
 	@Transactional
 	@Override
 	public void remover(Long cozinhaId) {
+
+		Cozinha cozinha = cozinhaRepository.findById(cozinhaId)
+				.orElseThrow(() -> new CozinhaNaoEncontradaException(Cozinha.class, cozinhaId));
 		try {
+
 			cozinhaRepository.deleteById(cozinhaId);
 			cozinhaRepository.flush();
-
-		} catch (EmptyResultDataAccessException e) {
-			throw new CozinhaNaoEncontradaException(Cozinha.class, cozinhaId);
 
 		} catch (DataIntegrityViolationException e) {
 			throw new EntitadeEmUsoException(Cozinha.class, cozinhaId);
