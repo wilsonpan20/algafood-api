@@ -1,6 +1,5 @@
-package com.will.shop.algafoodapi.api.assembler;
+package com.will.shop.algafoodapi.api.assembler.restauranteasssembler;
 
-import com.will.shop.algafoodapi.api.model.dto.response.CozinhaResponseDto;
 import com.will.shop.algafoodapi.api.model.dto.response.RestauranteResponseDto;
 import com.will.shop.algafoodapi.domain.model.Restaurante;
 import org.modelmapper.ModelMapper;

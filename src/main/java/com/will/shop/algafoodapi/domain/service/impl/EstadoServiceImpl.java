@@ -58,6 +58,7 @@ public class EstadoServiceImpl implements EstadoService {
 	public void remover(Long estadoId) {
 		try {
 			estadoRepository.deleteById(estadoId);
+			estadoRepository.flush();
 		} catch (EmptyResultDataAccessException e) {
 			throw new EstadoNaoEncontradaException(Estado.class, estadoId);
 		} catch (DataIntegrityViolationException e) {

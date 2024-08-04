@@ -76,6 +76,7 @@ public class CidadeServiceImpl implements CidadeService {
 	public void remover(Long cidadeId) {
 		try {
 			cidadeRepository.deleteById(cidadeId);
+			cidadeRepository.flush();
 
 		} catch (EmptyResultDataAccessException e) {
 			throw new CidadeNaoEncontradaException(Cidade.class, cidadeId);

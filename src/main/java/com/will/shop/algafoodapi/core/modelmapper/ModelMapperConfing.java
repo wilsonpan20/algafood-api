@@ -13,7 +13,7 @@ public class ModelMapperConfing {
 	public ModelMapper modelMapper() {
 		var modelMapper = new ModelMapper();
 		modelMapper.createTypeMap(Restaurante.class, RestauranteResponseDto.class)
-				.addMapping(Restaurante::getTaxaFrete,RestauranteResponseDto::setPrecoFrete);
+				.addMapping(Restaurante::getTaxaFrete, RestauranteResponseDto::setPrecoFrete);
 		return modelMapper;
 	}
 }

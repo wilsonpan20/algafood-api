@@ -1,6 +1,6 @@
 package com.will.shop.algafoodapi.domain.service.impl;
 
-import com.will.shop.algafoodapi.api.assembler.RestauranteRequestDtoAssembler;
+import com.will.shop.algafoodapi.api.assembler.restauranteasssembler.RestauranteRequestDtoAssembler;
 import com.will.shop.algafoodapi.domain.exception.EntitadeEmUsoException;
 import com.will.shop.algafoodapi.domain.exception.RestauranteNaoEncontradaException;
 import com.will.shop.algafoodapi.domain.model.Cozinha;
@@ -58,7 +58,9 @@ public class RestauranteServiceImpl implements RestauranteService {
 	public void remover(Long restauranteId) {
 		try {
 			restauranteRepository.deleteById(restauranteId);
+			restauranteRepository.flush();
 		} catch (EmptyResultDataAccessException e) {
+			System.out.println(e);
 			throw new RestauranteNaoEncontradaException(Restaurante.class, restauranteId);
 		} catch (DataIntegrityViolationException e) {
 			throw new EntitadeEmUsoException(Restaurante.class, restauranteId);

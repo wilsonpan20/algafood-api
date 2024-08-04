@@ -1,13 +1,12 @@
 package com.will.shop.algafoodapi.domain.service.impl;
 
 import com.will.shop.algafoodapi.domain.exception.CozinhaNaoEncontradaException;
-import com.will.shop.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
+
 import com.will.shop.algafoodapi.domain.exception.EntitadeEmUsoException;
 import com.will.shop.algafoodapi.domain.model.Cozinha;
 import com.will.shop.algafoodapi.domain.repository.CozinhaRepository;
 import com.will.shop.algafoodapi.domain.service.CozinhaService;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -59,6 +58,7 @@ public class CozinhaServiceImpl implements CozinhaService {
 	public void remover(Long cozinhaId) {
 		try {
 			cozinhaRepository.deleteById(cozinhaId);
+			cozinhaRepository.flush();
 
 		} catch (EmptyResultDataAccessException e) {
 			throw new CozinhaNaoEncontradaException(Cozinha.class, cozinhaId);

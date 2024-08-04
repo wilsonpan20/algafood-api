@@ -2,22 +2,21 @@ package com.will.shop.algafoodapi.api.controller;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.will.shop.algafoodapi.api.assembler.RestauranteRequestDtoAssembler;
-import com.will.shop.algafoodapi.api.assembler.RestauranteResponseDtoAssembler;
-import com.will.shop.algafoodapi.api.model.dto.request.CozinhaRequestDto;
+import com.will.shop.algafoodapi.api.assembler.restauranteasssembler.RestauranteRequestDtoAssembler;
+import com.will.shop.algafoodapi.api.assembler.restauranteasssembler.RestauranteResponseDtoAssembler;
 import com.will.shop.algafoodapi.api.model.dto.request.RestauranteRequestDto;
 import com.will.shop.algafoodapi.api.model.dto.response.RestauranteResponseDto;
 import com.will.shop.algafoodapi.core.validation.ValidacaoException;
 import com.will.shop.algafoodapi.domain.exception.CozinhaNaoEncontradaException;
 import com.will.shop.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.will.shop.algafoodapi.domain.exception.NegocioException;
-import com.will.shop.algafoodapi.domain.model.Cozinha;
 import com.will.shop.algafoodapi.domain.model.Restaurante;
 import com.will.shop.algafoodapi.domain.service.RestauranteService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
@@ -76,8 +75,8 @@ public class RestauranteController {
 
 	@PutMapping("/{restauranteId}")
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public RestauranteResponseDto atualizar (@PathVariable Long restauranteId,
-		@RequestBody @Valid	 RestauranteRequestDto restauranteRequestDto) {
+	public RestauranteResponseDto atualizar(@PathVariable Long restauranteId,
+			@RequestBody @Valid RestauranteRequestDto restauranteRequestDto) {
 		try {
 			Restaurante restauranteExistente = restauranteService.buscar(restauranteId);
 			restauranteRequestDtoAssembler.copyToDomainObject(restauranteRequestDto, restauranteExistente);
@@ -113,7 +112,12 @@ public class RestauranteController {
 
 	@DeleteMapping("/{restauranteId}")
 	public void excluir(@PathVariable Long restauranteId) {
-		restauranteService.remover(restauranteId);
+		try {
+			restauranteService.remover(restauranteId);
+		} catch (DataIntegrityViolationException e) {
+			throw new NegocioException(e.getMessage());
+		}
+
 	}
 
 	private static void merge(Map<String, Object> camposOrigem, Restaurante restauranteDestino,

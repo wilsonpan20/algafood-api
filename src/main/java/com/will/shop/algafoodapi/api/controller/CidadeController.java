@@ -1,11 +1,17 @@
 package com.will.shop.algafoodapi.api.controller;
 
+import com.will.shop.algafoodapi.api.assembler.cidadeassembler.CidadeRequestDtoAssembler;
+import com.will.shop.algafoodapi.api.assembler.cidadeassembler.CidadeResponseDtoAssembler;
+import com.will.shop.algafoodapi.api.model.dto.request.CidadeRequestDto;
+import com.will.shop.algafoodapi.api.model.dto.response.CidadeResponseDto;
+import com.will.shop.algafoodapi.domain.exception.CidadeNaoEncontradaException;
 import com.will.shop.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.will.shop.algafoodapi.domain.exception.NegocioException;
 import com.will.shop.algafoodapi.domain.model.Cidade;
 import com.will.shop.algafoodapi.domain.service.CidadeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,27 +22,31 @@ import java.util.List;
 public class CidadeController {
 
 	@Autowired
-	CidadeService cidadeService;
+	private CidadeService cidadeService;
+
+	@Autowired
+	private CidadeResponseDtoAssembler cidadeResponseDtoAssembler;
+
+	@Autowired
+	private CidadeRequestDtoAssembler cidadeRequestDtoAssembler;
 
 	@GetMapping
-	List<Cidade> listar() {
-		List<Cidade> cidades = cidadeService.listar();
+	List<CidadeResponseDto> listar() {
+		List<CidadeResponseDto> cidades = cidadeResponseDtoAssembler.toCollectionResponse(cidadeService.listar());
 		return cidades;
 	}
 
 	@GetMapping("/{cidadeId}")
-	Cidade buscar(@PathVariable Long cidadeId) {
-		Cidade cidade = cidadeService.buscar(cidadeId);
-		return cidade;
-
+	CidadeResponseDto buscar(@PathVariable Long cidadeId) {
+		return cidadeResponseDtoAssembler.responseDto(cidadeService.buscar(cidadeId));
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	Cidade adcionar(@RequestBody @Valid Cidade cidade) {
+	CidadeResponseDto adcionar(@RequestBody @Valid CidadeRequestDto cidadeRequestDto) {
 		try {
-			cidade = cidadeService.adcionar(cidade);
-			return cidade;
+			return cidadeResponseDtoAssembler.responseDto(
+					cidadeService.adcionar(cidadeRequestDtoAssembler.requestDto(cidadeRequestDto)));
 
 		} catch (EntidadeNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage(), e);
@@ -44,11 +54,14 @@ public class CidadeController {
 	}
 
 	@PutMapping("/{cidadeId}")
-	Cidade atualizar(@PathVariable Long cidadeId, @RequestBody @Valid Cidade cidade) {
+	CidadeResponseDto atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeRequestDto cidadeRequestDto) {
 		try {
-			cidade = cidadeService.atualizar(cidadeId, cidade);
-			return cidade;
-		} catch (EntidadeNaoEncontradaException e) {
+			Cidade cidadeExistente = cidadeService.buscar(cidadeId);
+
+			cidadeRequestDtoAssembler.copyToDomainObject(cidadeRequestDto, cidadeExistente);
+			return cidadeResponseDtoAssembler.responseDto(cidadeService.adcionar(cidadeExistente));
+
+		} catch (CidadeNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
 
@@ -57,6 +70,10 @@ public class CidadeController {
 	@DeleteMapping("/{cidadeId}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void excluir(@PathVariable Long cidadeId) {
-		cidadeService.remover(cidadeId);
+		try {
+			cidadeService.remover(cidadeId);
+		} catch (DataIntegrityViolationException e) {
+			throw new NegocioException(e.getMessage());
+		}
 	}
 }

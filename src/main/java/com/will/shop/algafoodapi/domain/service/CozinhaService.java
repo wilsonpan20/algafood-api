@@ -12,7 +12,5 @@ public interface CozinhaService {
 
 	Cozinha adcionar(Cozinha cozinha);
 
-	Cozinha atualizar(long cozinhaId, Cozinha cozinha);
-
 	void remover(Long id);
 }
