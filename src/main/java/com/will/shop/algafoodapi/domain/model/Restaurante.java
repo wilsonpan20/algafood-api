@@ -43,6 +43,9 @@ public class Restaurante {
 	@Embedded
 	private Endereco endereco;
 
+	@Column(name = "ativo", nullable = false)
+	private boolean ativo = Boolean.TRUE;
+
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime(6)")
 	private OffsetDateTime dataCadastro;
