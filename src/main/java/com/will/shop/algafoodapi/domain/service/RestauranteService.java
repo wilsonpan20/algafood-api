@@ -15,4 +15,9 @@ public interface RestauranteService {
 
 
 	void remover(Long RestauranteId);
+
+	void ativar(Long restauranteId);
+
+	void inativar(Long restauranteId);
+
 }

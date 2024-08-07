@@ -54,14 +54,25 @@ public class RestauranteServiceImpl implements RestauranteService {
 	}
 
 	@Transactional
+	public void ativar(Long restaurantId) {
+		Restaurante restauranteExistente = buscar(restaurantId);
+		restauranteExistente.ativar();
+	}
+
+	@Transactional
+	public void inativar(Long restaurantId) {
+		Restaurante restauranteExistente = buscar(restaurantId);
+		restauranteExistente.inativar();
+	}
+
+	@Transactional
 	@Override
 	public void remover(Long restauranteId) {
+		restauranteRepository.findById(restauranteId)
+				.orElseThrow(() -> new RestauranteNaoEncontradaException(Restaurante.class, restauranteId));
 		try {
 			restauranteRepository.deleteById(restauranteId);
 			restauranteRepository.flush();
-		} catch (EmptyResultDataAccessException e) {
-			System.out.println(e);
-			throw new RestauranteNaoEncontradaException(Restaurante.class, restauranteId);
 		} catch (DataIntegrityViolationException e) {
 			throw new EntitadeEmUsoException(Restaurante.class, restauranteId);
 		}
