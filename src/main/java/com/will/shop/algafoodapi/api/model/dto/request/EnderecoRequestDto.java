@@ -1,7 +1,5 @@
 package com.will.shop.algafoodapi.api.model.dto.request;
 
-import com.will.shop.algafoodapi.domain.model.Estado;
-
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,11 +8,20 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CidadeRequestDto {
+public class EnderecoRequestDto {
 
 	@NotBlank
-	private String nome;
+	private String cep;
+	@NotBlank
+	private String logradouro;
+	@NotBlank
+	private String numero;
+	@NotBlank
+	private String complemento;
+	@NotBlank
+	private String bairro;
 	@Valid
 	@NotNull
-	private EstadoIdRequestDto estado;
+	private CidadeIdRequestDto cidade;
+
 }

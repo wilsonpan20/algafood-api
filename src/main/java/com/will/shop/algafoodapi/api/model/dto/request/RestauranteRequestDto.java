@@ -15,12 +15,13 @@ public class RestauranteRequestDto {
 
 	@NotBlank
 	private String nome;
-
 	@NotNull
 	@PositiveOrZero
 	private BigDecimal taxaFrete;
-
 	@Valid
 	@NotNull
 	private CozinhaIdRequestDto cozinha;
+	@Valid
+	@NotNull
+	private EnderecoRequestDto endereco;
 }

@@ -7,6 +7,7 @@ import com.will.shop.algafoodapi.api.assembler.restauranteasssembler.Restaurante
 import com.will.shop.algafoodapi.api.model.dto.request.RestauranteRequestDto;
 import com.will.shop.algafoodapi.api.model.dto.response.RestauranteResponseDto;
 import com.will.shop.algafoodapi.core.validation.ValidacaoException;
+import com.will.shop.algafoodapi.domain.exception.CidadeNaoEncontradaException;
 import com.will.shop.algafoodapi.domain.exception.CozinhaNaoEncontradaException;
 import com.will.shop.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.will.shop.algafoodapi.domain.exception.NegocioException;
@@ -68,7 +69,10 @@ public class RestauranteController {
 
 			return restauranteResponseDtoAssembler.responseDto(restauranteService.adcionar(restauranteRequestDto));
 
-		} catch (EntidadeNaoEncontradaException e) {
+		} catch (Exception e) {
+			if (e instanceof CozinhaNaoEncontradaException || e instanceof CidadeNaoEncontradaException) {
+				throw new NegocioException(e.getMessage());
+			}
 			throw new NegocioException(e.getMessage());
 		}
 	}
@@ -83,7 +87,10 @@ public class RestauranteController {
 
 			return restauranteResponseDtoAssembler.responseDto(restauranteService.adcionar(restauranteExistente));
 
-		} catch (CozinhaNaoEncontradaException e) {
+		} catch (Exception e) {
+			if (e instanceof CozinhaNaoEncontradaException || e instanceof CidadeNaoEncontradaException) {
+				throw new NegocioException(e.getMessage());
+			}
 			throw new NegocioException(e.getMessage());
 		}
 	}

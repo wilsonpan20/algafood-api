@@ -1,10 +1,13 @@
 package com.will.shop.algafoodapi.domain.service.impl;
 
 import com.will.shop.algafoodapi.api.assembler.restauranteasssembler.RestauranteRequestDtoAssembler;
+import com.will.shop.algafoodapi.domain.exception.CidadeNaoEncontradaException;
 import com.will.shop.algafoodapi.domain.exception.EntitadeEmUsoException;
 import com.will.shop.algafoodapi.domain.exception.RestauranteNaoEncontradaException;
+import com.will.shop.algafoodapi.domain.model.Cidade;
 import com.will.shop.algafoodapi.domain.model.Cozinha;
 import com.will.shop.algafoodapi.domain.model.Restaurante;
+import com.will.shop.algafoodapi.domain.repository.CidadeRepository;
 import com.will.shop.algafoodapi.domain.repository.CozinhaRepository;
 import com.will.shop.algafoodapi.domain.repository.RestauranteRepository;
 import com.will.shop.algafoodapi.domain.service.RestauranteService;
@@ -26,7 +29,7 @@ public class RestauranteServiceImpl implements RestauranteService {
 	CozinhaRepository cozinhaRepository;
 
 	@Autowired
-	private RestauranteRequestDtoAssembler restauranteRequestDtoAssembler;
+	private CidadeRepository cidadeRepository;
 
 	@Override
 	public List<Restaurante> listar() {
@@ -44,9 +47,16 @@ public class RestauranteServiceImpl implements RestauranteService {
 	@Override
 	public Restaurante adcionar(Restaurante restaurante) {
 		Long cozinhaId = restaurante.getCozinha().getId();
+		long cidadeId = restaurante.getEndereco().getCidade().getId();
+
 		Cozinha cozinha = cozinhaRepository.findById(cozinhaId).orElseThrow(() -> {
 			throw new RestauranteNaoEncontradaException(Cozinha.class, cozinhaId);
 		});
+		Cidade cidade = cidadeRepository.findById(cidadeId).orElseThrow(() -> {
+			throw new CidadeNaoEncontradaException(Cidade.class, cidadeId);
+		});
+
+		restaurante.getEndereco().setCidade(cidade);
 
 		restaurante.setCozinha(cozinha);
 

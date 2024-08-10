@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class EstadoIdRequestDto {
+
 	@NotNull
 	private Long id;
 
