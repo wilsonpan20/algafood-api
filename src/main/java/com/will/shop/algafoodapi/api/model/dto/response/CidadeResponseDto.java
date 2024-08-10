@@ -10,6 +10,5 @@ public class CidadeResponseDto {
 
 	private long id;
 	private String nome;
-	@JsonIgnoreProperties(value = {"name"},allowGetters = true)
 	private EstadoResponseDto estado;
 }

@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CozinhaIdRequestDto {
+
 	@NotNull
 	private Long id;
 

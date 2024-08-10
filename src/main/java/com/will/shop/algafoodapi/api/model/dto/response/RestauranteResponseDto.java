@@ -10,12 +10,9 @@ import java.math.BigDecimal;
 public class RestauranteResponseDto {
 
 	private Long id;
-
 	private String nome;
-
 	private BigDecimal precoFrete;
-
 	private CozinhaResponseDto cozinha;
-
 	private boolean ativo;
+	private EnderecoResponseDto endereco;
 }
