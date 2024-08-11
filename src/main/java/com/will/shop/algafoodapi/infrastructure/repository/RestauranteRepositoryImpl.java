@@ -1,6 +1,6 @@
 package com.will.shop.algafoodapi.infrastructure.repository;
 
-import ch.qos.logback.core.util.StringUtil;
+
 import com.will.shop.algafoodapi.domain.model.Restaurante;
 import com.will.shop.algafoodapi.domain.repository.RestauranteRepository;
 import com.will.shop.algafoodapi.domain.repository.RestauranteRepositoryQueries;

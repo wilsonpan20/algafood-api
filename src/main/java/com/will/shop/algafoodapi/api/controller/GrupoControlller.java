@@ -10,6 +10,7 @@ import com.will.shop.algafoodapi.domain.model.Grupo;
 import com.will.shop.algafoodapi.domain.service.GrupoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -53,8 +54,13 @@ public class GrupoControlller {
 			throw new NegocioException(e.getMessage());
 		}
 	}
+
 	@DeleteMapping("{grupoId}")
-	void delete(@PathVariable Long grupoId){
-		grupoService.remove(grupoId);
+	void delete(@PathVariable Long grupoId) {
+		try {
+			grupoService.remove(grupoId);
+		} catch (DataIntegrityViolationException e) {
+			throw new NegocioException(e.getMessage());
+		}
 	}
 }

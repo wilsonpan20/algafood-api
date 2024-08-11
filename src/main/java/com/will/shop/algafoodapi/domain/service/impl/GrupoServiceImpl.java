@@ -5,6 +5,7 @@ import com.will.shop.algafoodapi.domain.exception.GrupoNaoEncontradaException;
 import com.will.shop.algafoodapi.domain.model.Grupo;
 import com.will.shop.algafoodapi.domain.repository.GrupoRepository;
 import com.will.shop.algafoodapi.domain.service.GrupoService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -31,11 +32,13 @@ public class GrupoServiceImpl implements GrupoService {
 	}
 
 	@Override
+	@Transactional
 	public Grupo adcionar(Grupo grupo) {
 		return grupoRepository.save(grupo);
 	}
 
 	@Override
+	@Transactional
 	public void remove(Long grupoId) {
 		Grupo grupoExistente = grupoRepository.findById(grupoId).orElseThrow(() -> {
 			throw new GrupoNaoEncontradaException(Grupo.class, grupoId);
