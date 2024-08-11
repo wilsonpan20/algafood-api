@@ -60,7 +60,6 @@ public class CozinhaServiceImpl implements CozinhaService {
 		Cozinha cozinha = cozinhaRepository.findById(cozinhaId)
 				.orElseThrow(() -> new CozinhaNaoEncontradaException(Cozinha.class, cozinhaId));
 		try {
-
 			cozinhaRepository.deleteById(cozinhaId);
 			cozinhaRepository.flush();
 

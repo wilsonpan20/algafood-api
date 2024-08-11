@@ -46,8 +46,9 @@ public class RestauranteServiceImpl implements RestauranteService {
 	@Transactional
 	@Override
 	public Restaurante adcionar(Restaurante restaurante) {
+
 		Long cozinhaId = restaurante.getCozinha().getId();
-		long cidadeId = restaurante.getEndereco().getCidade().getId();
+		Long cidadeId = restaurante.getEndereco().getCidade().getId();
 
 		Cozinha cozinha = cozinhaRepository.findById(cozinhaId).orElseThrow(() -> {
 			throw new RestauranteNaoEncontradaException(Cozinha.class, cozinhaId);
@@ -65,12 +66,14 @@ public class RestauranteServiceImpl implements RestauranteService {
 
 	@Transactional
 	public void ativar(Long restaurantId) {
+
 		Restaurante restauranteExistente = buscar(restaurantId);
 		restauranteExistente.ativar();
 	}
 
 	@Transactional
 	public void inativar(Long restaurantId) {
+
 		Restaurante restauranteExistente = buscar(restaurantId);
 		restauranteExistente.inativar();
 	}
@@ -78,6 +81,7 @@ public class RestauranteServiceImpl implements RestauranteService {
 	@Transactional
 	@Override
 	public void remover(Long restauranteId) {
+
 		restauranteRepository.findById(restauranteId)
 				.orElseThrow(() -> new RestauranteNaoEncontradaException(Restaurante.class, restauranteId));
 		try {
