@@ -26,10 +26,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	@Override
 	public Usuario buscar(Long usuarioId) {
-		Usuario usuario = usuarioRepository.findById(usuarioId).orElseThrow(() -> {
-			throw new UsuarioNaoEncontradaException(Usuario.class, usuarioId);
-		});
-		return usuario;
+		return usuarioRepository.findById(usuarioId)
+				.orElseThrow(() -> new UsuarioNaoEncontradaException(Usuario.class, usuarioId));
 	}
 
 	@Override

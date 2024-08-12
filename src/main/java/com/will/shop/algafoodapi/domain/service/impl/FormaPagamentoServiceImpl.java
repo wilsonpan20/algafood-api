@@ -15,7 +15,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class FormaPagamentoServiveImpl implements FormaPagamentoService {
+public class FormaPagamentoServiceImpl implements FormaPagamentoService {
 
 	@Autowired
 	private final FormaPagamentoRepository repository;
@@ -27,9 +27,8 @@ public class FormaPagamentoServiveImpl implements FormaPagamentoService {
 
 	@Override
 	public FormaPagamento buscar(Long formaPagamentoId) {
-		FormaPagamento formaPagamento = repository.findById(formaPagamentoId)
+		return repository.findById(formaPagamentoId)
 				.orElseThrow(() -> new FormaPagamentoNaoEncontradaException(FormaPagamento.class, formaPagamentoId));
-		return formaPagamento;
 	}
 
 	@Transactional

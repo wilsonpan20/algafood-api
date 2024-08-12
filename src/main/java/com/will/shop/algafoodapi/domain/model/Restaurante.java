@@ -1,14 +1,7 @@
 package com.will.shop.algafoodapi.domain.model;
 
-import com.will.shop.algafoodapi.core.validation.Groups;
 import com.will.shop.algafoodapi.core.validation.ValorZeroIncluirDescricao;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.groups.ConvertGroup;
-import jakarta.validation.groups.Default;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
@@ -17,7 +10,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @ValorZeroIncluirDescricao(valorField = "taxaFrete", descricaoField = "nome", descricaoObrigatoria = "Frete Gratis")
 @Data
@@ -56,17 +51,23 @@ public class Restaurante {
 
 	@ManyToMany
 	@JoinTable(name = "restaurante_forma_pagamento", joinColumns = @JoinColumn(name = "restaurante_id"), inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
-	private List<FormaPagamento> formasPagamento = new ArrayList<>();
+	private Set<FormaPagamento> formasPagamento = new HashSet<>();
 
 	@OneToMany(mappedBy = "restaurante")
 	private List<Produto> produtos = new ArrayList<>();
 
-	public void ativar(){
+	public void ativar() {
 		setAtivo(true);
 	}
 
-	public void inativar(){
+	public void inativar() {
 		setAtivo(false);
 	}
 
+	public void desassociarFormaPagamento(FormaPagamento formaPagamento) {
+		getFormasPagamento().remove(formaPagamento);
+	}
+	public boolean adcionarFormaPagamento(FormaPagamento formaPagamento) {
+		return getFormasPagamento().add(formaPagamento);
+	}
 }

@@ -6,10 +6,12 @@ import com.will.shop.algafoodapi.domain.exception.EntitadeEmUsoException;
 import com.will.shop.algafoodapi.domain.exception.RestauranteNaoEncontradaException;
 import com.will.shop.algafoodapi.domain.model.Cidade;
 import com.will.shop.algafoodapi.domain.model.Cozinha;
+import com.will.shop.algafoodapi.domain.model.FormaPagamento;
 import com.will.shop.algafoodapi.domain.model.Restaurante;
 import com.will.shop.algafoodapi.domain.repository.CidadeRepository;
 import com.will.shop.algafoodapi.domain.repository.CozinhaRepository;
 import com.will.shop.algafoodapi.domain.repository.RestauranteRepository;
+import com.will.shop.algafoodapi.domain.service.FormaPagamentoService;
 import com.will.shop.algafoodapi.domain.service.RestauranteService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,9 @@ public class RestauranteServiceImpl implements RestauranteService {
 
 	@Autowired
 	private CidadeRepository cidadeRepository;
+
+	@Autowired
+	FormaPagamentoService formaPagamentoService;
 
 	@Override
 	public List<Restaurante> listar() {
@@ -91,4 +96,23 @@ public class RestauranteServiceImpl implements RestauranteService {
 			throw new EntitadeEmUsoException(Restaurante.class, restauranteId);
 		}
 	}
+
+	@Transactional
+	@Override
+	public void desassociarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+		Restaurante restaurante = buscar(restauranteId);
+		FormaPagamento formaPagamento = formaPagamentoService.buscar(formaPagamentoId);
+
+		restaurante.desassociarFormaPagamento(formaPagamento);
+	}
+
+	@Transactional
+	@Override
+	public void adcionarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+		Restaurante restaurante = buscar(restauranteId);
+		FormaPagamento formaPagamento = formaPagamentoService.buscar(formaPagamentoId);
+
+		restaurante.adcionarFormaPagamento(formaPagamento);
+	}
+
 }

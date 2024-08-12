@@ -25,9 +25,8 @@ public class GrupoServiceImpl implements GrupoService {
 
 	@Override
 	public Grupo buscar(Long grupoId) {
-		Grupo grupo = grupoRepository.findById(grupoId).orElseThrow(() -> {
-			throw new GrupoNaoEncontradaException(Grupo.class, grupoId);
-		});
+		Grupo grupo = grupoRepository.findById(grupoId)
+				.orElseThrow(() -> new GrupoNaoEncontradaException(Grupo.class, grupoId));
 		return grupo;
 	}
 
