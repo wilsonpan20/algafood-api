@@ -12,4 +12,8 @@ public interface GrupoService {
 	Grupo adcionar(Grupo grupo);
 
 	void remove(Long grupoId);
+
+	void desassociarPermissao(Long grupoId,Long permissaoId);
+	void associarPermissao(Long grupoId,Long permissaoId);
+
 }
