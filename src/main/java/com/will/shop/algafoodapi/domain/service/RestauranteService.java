@@ -23,4 +23,8 @@ public interface RestauranteService {
 
 	void adcionarFormaPagamento(Long restauranteId, Long formaPagamentoId);
 
+	void abrirRestaurante(Long restauranteId);
+
+	void fecharRestaurante(Long restauranteId);
+
 }

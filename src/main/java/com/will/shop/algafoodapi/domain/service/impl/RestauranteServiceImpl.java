@@ -115,4 +115,17 @@ public class RestauranteServiceImpl implements RestauranteService {
 		restaurante.adcionarFormaPagamento(formaPagamento);
 	}
 
+	@Override
+	public void abrirRestaurante(Long restauranteId) {
+		Restaurante restauranteExistente = buscar(restauranteId);
+		restauranteExistente.abrir();
+	}
+
+	@Override
+	public void fecharRestaurante(Long restauranteId) {
+		Restaurante restauranteExistente = buscar(restauranteId);
+		restauranteExistente.fechar();
+
+	}
+
 }

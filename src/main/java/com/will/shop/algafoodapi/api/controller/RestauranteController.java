@@ -14,6 +14,7 @@ import com.will.shop.algafoodapi.domain.exception.NegocioException;
 import com.will.shop.algafoodapi.domain.model.Restaurante;
 import com.will.shop.algafoodapi.domain.service.RestauranteService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -175,6 +176,22 @@ public class RestauranteController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void inativar(@PathVariable Long restauranteId) {
 		restauranteService.inativar(restauranteId);
+
+	}
+
+	@Transactional
+	@PutMapping("/{restauranteId}/abertura")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void abrir(@PathVariable Long restauranteId) {
+		restauranteService.abrirRestaurante(restauranteId);
+
+	}
+
+	@Transactional
+	@PutMapping("/{restauranteId}/fechamento")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void fechar(@PathVariable Long restauranteId) {
+		restauranteService.fecharRestaurante(restauranteId);
 
 	}
 
